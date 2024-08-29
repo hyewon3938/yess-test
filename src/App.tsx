@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import GlobalStyleProvider from "./styles/GlobalStyleProvider";
-import CatViewer from "./CatViewer";
-import WorkingHours from "./WorkingHours";
+import CatViewer from "./components/CatViewer/CatViewer";
+import WorkingHours from "./components/WorkingHours/WorkingHours";
 import "./App.css";
 
 function App() {
