@@ -1,7 +1,8 @@
 import styled from "styled-components";
 // import { useTypedDispatch, useTypedSelector } from "./hooks/redux";
 // import { setCount } from "./store/slices/testSlice";
-import ImageList from "./ImageList";
+import MasonryImageView from "./MasonryImageView";
+import axios from "axios";
 
 function CatViewer() {
   // const { count } = useTypedSelector((state) => state.test);
@@ -16,10 +17,17 @@ function CatViewer() {
   //   }
   // };
 
+  const getImages = () => {
+    return axios({
+      method: "get",
+      url: "https://api.thecatapi.com/v1/images/search?limit=10",
+    });
+  };
+
   return (
     <Wrap>
       <ContentWrap>
-        <ImageList />
+        <MasonryImageView getData={getImages} />
         {/* <h2>{count}</h2>
       <div>
         <button onClick={() => onClickButton("INCREASE")}>더하기</button>

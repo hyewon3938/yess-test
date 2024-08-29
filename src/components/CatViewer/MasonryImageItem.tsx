@@ -9,16 +9,20 @@ interface ImageDataProps {
   data: ImageData;
 }
 
-const ImageItem: React.FC<ImageDataProps> = ({ order, colOrder, data }) => {
+const MasonryImageItem: React.FC<ImageDataProps> = ({
+  order,
+  colOrder,
+  data,
+}) => {
   return (
     <Wrap>
       <span>{colOrder + " " + order + " " + data?.order}</span>
-      <img src={data.url} />
+      <img src={data.url} alt={`cat-iamge-${data?.id}`} />
     </Wrap>
   );
 };
 
-export default ImageItem;
+export default MasonryImageItem;
 
 const Wrap = styled.li`
   position: relative;
