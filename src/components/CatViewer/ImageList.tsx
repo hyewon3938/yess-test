@@ -5,31 +5,21 @@ import ImageItem from "./ImageItem";
 import { ImageData } from "./catViewer.types";
 
 const ImageList = () => {
-  const [images, setImages] = useState<ImageData[]>([]);
   const [columns, setColumns] = useState<Array<ImageData[]>>([[], [], []]);
 
   useEffect(() => {
     getImages();
   }, []);
 
-  useEffect(() => {
-    if (images.length) {
-      distributeImages(images, 3);
-    }
-  }, [images]);
+  const distributeImages = (newImages: ImageData[]) => {
+    const updatedColumns = [...columns];
 
-  const distributeImages = (images: ImageData[], numColumns: number) => {
-    const newColumns: Array<ImageData[]> = Array.from(
-      { length: numColumns },
-      () => []
-    );
-
-    images.forEach((image, index) => {
+    newImages.forEach((image, index) => {
       image.order = index; // 순서대로 이미지가 나오는지 확인하는 용
-      newColumns[index % numColumns].push(image);
+      updatedColumns[index % 3].push(image);
     });
 
-    setColumns(newColumns);
+    setColumns(updatedColumns);
   };
 
   const getImages = async () => {
@@ -38,7 +28,9 @@ const ImageList = () => {
       url: "https://api.thecatapi.com/v1/images/search?limit=10",
     });
 
-    setImages((prev) => [...prev, ...res.data]);
+    if (res?.data?.length) {
+      distributeImages(res.data);
+    }
   };
 
   return (
