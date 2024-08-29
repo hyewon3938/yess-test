@@ -1,7 +1,9 @@
 import { ThemeProvider } from "styled-components";
 import { createGlobalStyle } from "styled-components";
+import { reset } from "styled-reset";
 
 const GlobalStyles = createGlobalStyle`
+    ${reset}
     html {
       position: relative;
     }
@@ -14,6 +16,8 @@ const GlobalStyles = createGlobalStyle`
       box-sizing: border-box;   
       user-select: none;
       -webkit-touch-callout: none;
+      padding : 0;
+      margin: 0;
       &::-webkit-scrollbar {
         display: none;
       } 
@@ -29,7 +33,6 @@ const GlobalStyles = createGlobalStyle`
       border: 0;
       background: transparent;
       cursor: pointer;
-      padding : 0;
       outline: none;
       -webkit-tap-highlight-color : rgba(0,0,0,0);
     }
