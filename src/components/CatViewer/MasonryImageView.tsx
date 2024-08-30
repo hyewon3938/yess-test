@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { ImageData } from "./catViewer.types";
 import MasonryImageItem from "./MasonryImageItem";
+import useIntersect from "../../hooks/useIntersect";
 
 type GetDataFunction = () => Promise<{ data: ImageData[] }>;
 
@@ -36,8 +37,6 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
       const minHeightIndex = updatedColumnHeights.indexOf(
         Math.min(...updatedColumnHeights)
       );
-      console.log(updatedColumnHeights);
-      console.log(minHeightIndex);
 
       updatedColumns[minHeightIndex] = [
         ...updatedColumns[minHeightIndex],
@@ -74,8 +73,10 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
   };
 
   const onClickMore = () => {
+    console.log("onIntersect");
     getDataHandler();
   };
+  const observerRef = useIntersect(onClickMore);
 
   return (
     <>
@@ -93,7 +94,8 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
           </Column>
         ))}
       </Wrap>
-      <button onClick={onClickMore}>더보기</button>
+
+      <Observer ref={observerRef} />
     </>
   );
 };
@@ -117,4 +119,9 @@ const Column = styled.div`
   &:last-child {
     margin-right: 0;
   }
+`;
+
+const Observer = styled.div`
+  width: 100%;
+  height: 50px;
 `;
