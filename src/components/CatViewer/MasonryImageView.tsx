@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { ImageData } from "./catViewer.types";
 import MasonryImageItem from "./MasonryImageItem";
@@ -15,6 +15,8 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
   getData,
 }) => {
   const [columns, setColumns] = useState<Array<ImageData[]>>([[], [], []]);
+  const [columnHeights, setColumnHeights] = useState<number[]>([0, 0, 0]);
+  const columnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (getData) return;
@@ -22,21 +24,47 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
   }, [list]);
 
   useEffect(() => {
-    getData && getImages();
+    getData && getDataHandler();
   }, []);
 
   const distributeImages = (newImages: ImageData[]) => {
     const updatedColumns = [...columns];
+    const updatedColumnHeights = [...columnHeights];
 
     newImages.forEach((image, index) => {
       image.order = index; // 순서대로 이미지가 나오는지 확인하는 용
-      updatedColumns[index % 3].push(image);
+      const minHeightIndex = updatedColumnHeights.indexOf(
+        Math.min(...updatedColumnHeights)
+      );
+      console.log(updatedColumnHeights);
+      console.log(minHeightIndex);
+
+      updatedColumns[minHeightIndex] = [
+        ...updatedColumns[minHeightIndex],
+        image,
+      ];
+
+      updatedColumnHeights[minHeightIndex] += calculateExpectedHeight(
+        image.width,
+        image.height
+      );
     });
 
     setColumns(updatedColumns);
+    setColumnHeights(updatedColumnHeights);
   };
 
-  const getImages = async () => {
+  const calculateExpectedHeight = (
+    originalWidth: number,
+    originalHeight: number
+  ): number => {
+    const columnWidth: number = columnRef.current?.offsetWidth || 0;
+    const scaleFactor = columnWidth / originalWidth;
+    const expectedHeight = originalHeight * scaleFactor;
+    return expectedHeight;
+  };
+
+  const getDataHandler = async () => {
     if (!getData) return;
     const res = await getData();
 
@@ -46,14 +74,14 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
   };
 
   const onClickMore = () => {
-    getImages();
+    getDataHandler();
   };
 
   return (
     <>
       <Wrap>
         {columns.map((column, colIndex) => (
-          <Column key={colIndex}>
+          <Column ref={columnRef} key={colIndex}>
             {column.map((item, index) => (
               <MasonryImageItem
                 key={item?.id}
