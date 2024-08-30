@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { ImageData } from "../CatViewer/catViewer.types";
+import { ImageData } from "../../CatViewer/catViewer.types";
 
 interface ImageDataProps {
   order: number;
@@ -10,8 +10,8 @@ interface ImageDataProps {
 }
 
 interface WrapProps {
-  expectedHeight?: number | undefined;
-  isImageLoaded?: boolean;
+  $expectedHeight?: number | undefined;
+  $isImageLoaded?: boolean;
 }
 
 const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
@@ -28,10 +28,10 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
   return (
     <>
       <SkeletonWrap
-        expectedHeight={data?.expectedHeight}
-        isImageLoaded={isLoaded}
+        $expectedHeight={data?.expectedHeight}
+        $isImageLoaded={isLoaded}
       />
-      <Wrap isImageLoaded={isLoaded}>
+      <Wrap $isImageLoaded={isLoaded}>
         <img
           src={data.url}
           alt={`cat-image-${data?.id}`}
@@ -44,21 +44,23 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
 };
 
 export default MasonryImageItem;
-
 const SkeletonWrap = styled.div<WrapProps>`
-  display: ${({ isImageLoaded }) => (isImageLoaded ? "none" : "block")};
+  display: ${({ $isImageLoaded }) => ($isImageLoaded ? "none" : "block")};
   width: 100%;
-  height: ${({ expectedHeight }) => expectedHeight}px;
+  height: ${({ $expectedHeight }) =>
+    $expectedHeight ? `${$expectedHeight}px` : "200px"};
   background-color: #ededed;
 `;
 
 const Wrap = styled.li<WrapProps>`
   position: relative;
   margin-bottom: 16px;
+
   img {
     width: 100%;
-    display: ${({ isImageLoaded }) => (isImageLoaded ? "block" : "none")};
+    display: ${({ $isImageLoaded }) => ($isImageLoaded ? "block" : "none")};
   }
+
   > span {
     position: absolute;
     top: 10px;
