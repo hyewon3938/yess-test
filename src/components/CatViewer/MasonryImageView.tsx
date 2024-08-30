@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { ImageData } from "./catViewer.types";
 import MasonryImageItem from "./MasonryImageItem";
 import useIntersect from "../../hooks/useIntersect";
+import useMasonryLayout from "./useMasonryLayout";
 
 type GetDataFunction = () => Promise<{ data: ImageData[] }>;
 
@@ -15,60 +16,23 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
   list,
   getData,
 }) => {
-  const [columns, setColumns] = useState<Array<ImageData[]>>([[], [], []]);
-  const [columnHeights, setColumnHeights] = useState<number[]>([0, 0, 0]);
-  const columnRef = useRef<HTMLDivElement>(null);
+  const { columns, columnRef, addImages } = useMasonryLayout(3);
 
   useEffect(() => {
     if (getData) return;
-    list && distributeImages(list); // list만으로도 렌더링이 가능하도록 로직 추가
+    list && addImages(list); // list만으로도 렌더링이 가능하도록 로직 추가
   }, [list]);
 
   useEffect(() => {
     getData && getDataHandler();
   }, []);
 
-  const distributeImages = (newImages: ImageData[]) => {
-    const updatedColumns = [...columns];
-    const updatedColumnHeights = [...columnHeights];
-
-    newImages.forEach((image, index) => {
-      image.order = index; // 순서대로 이미지가 나오는지 확인하는 용
-      const minHeightIndex = updatedColumnHeights.indexOf(
-        Math.min(...updatedColumnHeights)
-      );
-
-      updatedColumns[minHeightIndex] = [
-        ...updatedColumns[minHeightIndex],
-        image,
-      ];
-
-      updatedColumnHeights[minHeightIndex] += calculateExpectedHeight(
-        image.width,
-        image.height
-      );
-    });
-
-    setColumns(updatedColumns);
-    setColumnHeights(updatedColumnHeights);
-  };
-
-  const calculateExpectedHeight = (
-    originalWidth: number,
-    originalHeight: number
-  ): number => {
-    const columnWidth: number = columnRef.current?.offsetWidth || 0;
-    const scaleFactor = columnWidth / originalWidth;
-    const expectedHeight = originalHeight * scaleFactor;
-    return expectedHeight;
-  };
-
   const getDataHandler = async () => {
     if (!getData) return;
     const res = await getData();
 
     if (res?.data?.length) {
-      distributeImages(res?.data);
+      addImages(res.data);
     }
   };
 
@@ -85,7 +49,7 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
           <Column ref={columnRef} key={colIndex}>
             {column.map((item, index) => (
               <MasonryImageItem
-                key={item?.id}
+                key={`image-${colIndex}-${index}-${item?.id}`}
                 colOrder={colIndex}
                 order={index}
                 data={item}
