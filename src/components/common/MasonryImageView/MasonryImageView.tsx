@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ImageData } from "../CatViewer/catViewer.types";
+import { ImageData } from "../../CatViewer/catViewer.types";
 import MasonryImageItem from "./MasonryImageItem";
-import useIntersect from "../../hooks/useIntersect";
-import useMasonryLayout from "../../hooks/useMasonryLayout";
-import { GetImagesParams } from "../CatViewer/catViewer.types";
+import useIntersect from "../../../hooks/useIntersect";
+import useMasonryLayout from "./useMasonryLayout";
+import { GetImagesParams } from "../../CatViewer/catViewer.types";
+import LoadingIndicator from "../LoadingIndicator";
 
 type GetDataFunction = ({
   page,
@@ -74,7 +75,9 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
         ))}
       </Wrap>
 
-      <Observer ref={observerRef} />
+      <Observer ref={observerRef}>
+        <LoadingIndicator />
+      </Observer>
     </>
   );
 };
@@ -101,8 +104,10 @@ const Column = styled.div`
 `;
 
 const Observer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 50px;
-  padding: 16px;
-  border: solid 1px red;
+  // height: 80px;
+  padding: 48px;
 `;
