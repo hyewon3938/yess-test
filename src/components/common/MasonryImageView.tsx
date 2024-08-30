@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ImageData } from "./catViewer.types";
+import { ImageData } from "../CatViewer/catViewer.types";
 import MasonryImageItem from "./MasonryImageItem";
 import useIntersect from "../../hooks/useIntersect";
-import useMasonryLayout from "./useMasonryLayout";
+import useMasonryLayout from "../../hooks/useMasonryLayout";
+import { GetImagesParams } from "../CatViewer/catViewer.types";
 
-type GetDataFunction = () => Promise<{ data: ImageData[] }>;
+type GetDataFunction = ({
+  page,
+  limit,
+}: GetImagesParams) => Promise<{ data: ImageData[] }>;
 
 interface MasonryImageViewProps {
   list?: ImageData[];
@@ -16,6 +20,9 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
   list,
   getData,
 }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(-1);
+
   const { columns, columnRef, addImages } = useMasonryLayout(3);
 
   useEffect(() => {
@@ -24,23 +31,31 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({
   }, [list]);
 
   useEffect(() => {
-    getData && getDataHandler();
+    getData && getDataHandler({ page: 0, limit: 15 });
   }, []);
 
-  const getDataHandler = async () => {
+  const getDataHandler = async ({ page, limit }: GetImagesParams) => {
+    if (loading) return;
+    if (currentPage === page) return;
     if (!getData) return;
-    const res = await getData();
+
+    setLoading(true);
+
+    const res = await getData({ page: page, limit: limit });
+
+    setLoading(false);
+    setCurrentPage(page);
 
     if (res?.data?.length) {
       addImages(res.data);
     }
   };
 
-  const onClickMore = () => {
-    console.log("onIntersect");
-    getDataHandler();
+  const onIntersectHandler = () => {
+    getDataHandler({ page: currentPage + 1 });
   };
-  const observerRef = useIntersect(onClickMore);
+
+  const observerRef = useIntersect(onIntersectHandler);
 
   return (
     <>
@@ -88,4 +103,6 @@ const Column = styled.div`
 const Observer = styled.div`
   width: 100%;
   height: 50px;
+  padding: 16px;
+  border: solid 1px red;
 `;

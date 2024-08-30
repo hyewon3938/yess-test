@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { ImageData } from "./catViewer.types";
+import { ImageData } from "../components/CatViewer/catViewer.types";
 
 const useMasonryLayout = (columnCount: number = 3) => {
   const [columns, setColumns] = useState<Array<ImageData[]>>(
@@ -27,16 +27,21 @@ const useMasonryLayout = (columnCount: number = 3) => {
 
         newImages.forEach((image, index) => {
           console.log("run");
-          const newImage = { ...image, order: index };
+          const expectedHeight = calculateExpectedHeight(
+            image.width,
+            image.height
+          );
+          const newImage = {
+            ...image,
+            order: index,
+            expectedHeight: expectedHeight,
+          };
           const minHeightIndex = updatedColumnHeights.indexOf(
             Math.min(...updatedColumnHeights)
           );
 
           updatedColumns[minHeightIndex].push(newImage);
-          updatedColumnHeights[minHeightIndex] += calculateExpectedHeight(
-            image.width,
-            image.height
-          );
+          updatedColumnHeights[minHeightIndex] += expectedHeight;
         });
 
         setColumnHeights(updatedColumnHeights);
