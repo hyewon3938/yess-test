@@ -1,6 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { WorkingHourData } from "../../components/WorkingHours/workingHours.types";
-import { WorkingHourState } from "../../components/WorkingHours/workingHours.types";
+import {
+  WorkingHourState,
+  RangeData,
+} from "../../components/WorkingHours/workingHours.types";
 
 const initialState: WorkingHourState = {
   weeklyData: {
@@ -92,20 +95,29 @@ export const workingHourSlice = createSlice({
         rangeIndex: number;
       }>
     ) => {
-      console.log(payload);
       const { key, rangeIndex } = payload;
-      // const key = payload as keyof WorkingHourState["weeklyData"];
-      //state.weeklyData[key].range.push(newRangeData);
       state.weeklyData[key].range = state.weeklyData[key].range.filter(
         (_, index) => index !== rangeIndex
       );
     },
-
-    setCount: (state, { payload }: PayloadAction<number>) => {
-      // state.count = payload;
+    changeTimeValue: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        key: keyof WorkingHourState["weeklyData"];
+        rangeIndex: number;
+        rangeType: keyof RangeData;
+        value: string;
+      }>
+    ) => {
+      const { key, rangeIndex, rangeType, value } = payload;
+      const [hour, minute] = value.split(":");
+      state.weeklyData[key].range[rangeIndex][rangeType] = { hour, minute };
     },
   },
 });
 
-export const { addRange, deleteRange, setCount } = workingHourSlice.actions;
+export const { addRange, deleteRange, changeTimeValue } =
+  workingHourSlice.actions;
 export default workingHourSlice.reducer;

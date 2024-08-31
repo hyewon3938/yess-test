@@ -20,7 +20,7 @@ export interface RangeData {
   start: TimeData;
   end: TimeData;
 }
-interface TimeData {
+export interface TimeData {
   hour: string;
   minute: string;
 }

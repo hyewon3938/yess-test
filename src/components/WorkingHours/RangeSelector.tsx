@@ -3,18 +3,34 @@ import styled from "styled-components";
 
 import TimeSelect from "./TimeSelect";
 
-import { RangeData } from "./workingHours.types";
+import { WorkingHourState, RangeData } from "./workingHours.types";
 
 interface RangeSelectorProps {
-  data: RangeData;
+  dataKey: keyof WorkingHourState["weeklyData"];
+  rangeData: RangeData;
+  rangeIndex: number;
 }
 
-const RangeSelector: React.FC<RangeSelectorProps> = ({}) => {
+const RangeSelector: React.FC<RangeSelectorProps> = ({
+  dataKey,
+  rangeData,
+  rangeIndex,
+}) => {
   return (
     <Wrap>
-      <TimeSelect />
+      <TimeSelect
+        dataKey={dataKey}
+        rangeIndex={rangeIndex}
+        rangeType={"start"}
+        value={rangeData.start}
+      />
       <span>-</span>
-      <TimeSelect />
+      <TimeSelect
+        dataKey={dataKey}
+        rangeIndex={rangeIndex}
+        rangeType={"end"}
+        value={rangeData.end}
+      />
     </Wrap>
   );
 };

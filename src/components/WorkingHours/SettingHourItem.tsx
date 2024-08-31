@@ -29,8 +29,12 @@ const SettingHourItem: React.FC<SettingHourItemProps> = ({ data }) => {
         {data?.range?.length > 0 ? (
           <>
             {data?.range?.map((item, index) => (
-              <RangeItemWrap>
-                <RangeSelector data={item} />
+              <RangeItemWrap key={`${data.id}-working-hour-range-${index}`}>
+                <RangeSelector
+                  dataKey={data.id}
+                  rangeData={item}
+                  rangeIndex={index}
+                />
                 <IconButton onClick={() => onClickDelete(index)}>
                   {deleteIcon}
                 </IconButton>
