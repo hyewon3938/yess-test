@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import SettingHours from "./SettingHours";
 
-function WorkingHours() {
+function WorkingHoursContainer() {
   return (
     <Wrap>
       <ContentWrap>
@@ -14,7 +14,7 @@ function WorkingHours() {
   );
 }
 
-export default WorkingHours;
+export default WorkingHoursContainer;
 
 const Wrap = styled.div`
   display: flex;

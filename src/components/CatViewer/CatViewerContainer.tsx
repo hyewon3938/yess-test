@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import CatImages from "./CatImages";
 
-function CatViewer() {
+function CatViewerContainer() {
   return (
     <Wrap>
       <ContentWrap>
@@ -11,7 +11,7 @@ function CatViewer() {
   );
 }
 
-export default CatViewer;
+export default CatViewerContainer;
 
 const Wrap = styled.div`
   width: 100%;

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import GlobalStyleProvider from "./styles/GlobalStyleProvider";
-import CatViewer from "./components/CatViewer/CatViewer";
-import WorkingHours from "./components/WorkingHours/WorkingHours";
+import CatViewerContainer from "./components/CatViewer/CatViewerContainer";
+import WorkingHoursContainer from "./components/WorkingHours/WorkingHoursContainer";
 import "./App.css";
 
 function App() {
@@ -26,8 +26,8 @@ function App() {
             </ul>
           </nav> */}
         <Switch>
-          <Route path="/cat-viewer" component={CatViewer} />
-          <Route path="/working-hour" component={WorkingHours} />
+          <Route path="/cat-viewer" component={CatViewerContainer} />
+          <Route path="/working-hour" component={WorkingHoursContainer} />
         </Switch>
         {/* </div> */}
       </Router>
