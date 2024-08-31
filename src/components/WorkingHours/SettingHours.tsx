@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useTypedSelector, useTypedDispatch } from "../../hooks/redux";
 import SettingHourItem from "./SettingHourItem";
+import { setweeklyData } from "../../store/slices/workingHourSlice";
 
 interface ButtonProps {
   $isColored?: boolean;
@@ -10,6 +11,20 @@ interface ButtonProps {
 const SettingHours: React.FC<ButtonProps> = () => {
   const { weeklyData } = useTypedSelector((state) => state.workingHours);
   const dispatch = useTypedDispatch();
+
+  useEffect(() => {
+    checkLocalData();
+  }, []);
+
+  const checkLocalData = () => {
+    const localData = localStorage.getItem("LOCAL_WEEKLY_DATA");
+
+    if (!localData) {
+      localStorage.setItem("LOCAL_WEEKLY_DATA", JSON.stringify(weeklyData));
+    } else {
+      dispatch(setweeklyData(JSON.parse(localData)));
+    }
+  };
 
   return (
     <Wrap>

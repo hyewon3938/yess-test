@@ -80,6 +80,12 @@ export const workingHourSlice = createSlice({
   name: "workingHours",
   initialState,
   reducers: {
+    setweeklyData: (
+      state,
+      { payload }: PayloadAction<WorkingHourState["weeklyData"]>
+    ) => {
+      state.weeklyData = payload;
+    },
     addRange: (
       state,
       { payload }: PayloadAction<keyof WorkingHourState["weeklyData"]>
@@ -118,6 +124,6 @@ export const workingHourSlice = createSlice({
   },
 });
 
-export const { addRange, deleteRange, changeTimeValue } =
+export const { setweeklyData, addRange, deleteRange, changeTimeValue } =
   workingHourSlice.actions;
 export default workingHourSlice.reducer;
