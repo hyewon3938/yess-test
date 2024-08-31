@@ -5,7 +5,7 @@ import RangeSelector from "./RangeSelector";
 import { deleteIcon, addIcon } from "../../images/icon";
 import { WorkingHourData } from "./workingHours.types";
 import { useTypedDispatch } from "../../hooks/redux";
-import { addRange } from "../../store/slices/workingHourSlice";
+import { addRange, deleteRange } from "../../store/slices/workingHourSlice";
 
 interface SettingHourItemProps {
   data: WorkingHourData;
@@ -18,6 +18,10 @@ const SettingHourItem: React.FC<SettingHourItemProps> = ({ data }) => {
     dispatch(addRange(data?.id));
   };
 
+  const onClickDelete = (index: number) => {
+    dispatch(deleteRange({ key: data?.id, rangeIndex: index }));
+  };
+
   return (
     <Wrap>
       <Title>{data.title}</Title>
@@ -27,7 +31,9 @@ const SettingHourItem: React.FC<SettingHourItemProps> = ({ data }) => {
             {data?.range?.map((item, index) => (
               <RangeItemWrap>
                 <RangeSelector data={item} />
-                <IconButton>{deleteIcon}</IconButton>
+                <IconButton onClick={() => onClickDelete(index)}>
+                  {deleteIcon}
+                </IconButton>
                 {index === data?.range?.length - 1 && (
                   <IconButton onClick={onClickAdd}>{addIcon}</IconButton>
                 )}
@@ -46,18 +52,24 @@ export default SettingHourItem;
 
 const Wrap = styled.li`
   display: flex;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
+  height: fit-content;
   padding: 24px 0;
   border-bottom: solid 1px #e7e7e7;
 `;
 
-const Title = styled.h3`
+const Title = styled.div`
   width: 130px;
   font-size: 18px;
+  height: 100%;
+  padding: 16px;
 `;
 
 const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  height: 100%;
   > svg {
     width: 22px;
   }

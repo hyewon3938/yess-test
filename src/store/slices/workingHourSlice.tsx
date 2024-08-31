@@ -17,10 +17,6 @@ const initialState: WorkingHourState = {
           start: { hour: "09", minute: "00" },
           end: { hour: "17", minute: "00" },
         },
-        {
-          start: { hour: "09", minute: "00" },
-          end: { hour: "17", minute: "00" },
-        },
       ],
     },
     TUE: {
@@ -85,14 +81,31 @@ export const workingHourSlice = createSlice({
       state,
       { payload }: PayloadAction<keyof WorkingHourState["weeklyData"]>
     ) => {
-      const key = payload as keyof WorkingHourState["weeklyData"];
-      state.weeklyData[key].range.push(newRangeData);
+      state.weeklyData[payload].range.push(newRangeData);
     },
+    deleteRange: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        key: keyof WorkingHourState["weeklyData"];
+        rangeIndex: number;
+      }>
+    ) => {
+      console.log(payload);
+      const { key, rangeIndex } = payload;
+      // const key = payload as keyof WorkingHourState["weeklyData"];
+      //state.weeklyData[key].range.push(newRangeData);
+      state.weeklyData[key].range = state.weeklyData[key].range.filter(
+        (_, index) => index !== rangeIndex
+      );
+    },
+
     setCount: (state, { payload }: PayloadAction<number>) => {
       // state.count = payload;
     },
   },
 });
 
-export const { addRange, setCount } = workingHourSlice.actions;
+export const { addRange, deleteRange, setCount } = workingHourSlice.actions;
 export default workingHourSlice.reducer;
