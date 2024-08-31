@@ -7,7 +7,6 @@ export const getCatImages = ({ page, limit = 30 }: GetImagesParams) => {
   reqParams.append("api_key", process.env.REACT_APP_API_KEY || "");
   reqParams.append("limit", limit.toString());
   reqParams.append("page", page.toString());
-  //reqParams.append("size", "thumb");
 
   return axios({
     method: "get",
