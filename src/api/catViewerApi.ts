@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GetImagesParams } from "../components/CatViewer/catViewer.types";
 
-export const getImages = ({ page, limit = 30 }: GetImagesParams) => {
+export const getCatImages = ({ page, limit = 30 }: GetImagesParams) => {
   const reqParams = new URLSearchParams();
 
   reqParams.append("api_key", process.env.REACT_APP_API_KEY || "");
