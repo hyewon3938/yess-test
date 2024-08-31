@@ -1,31 +1,31 @@
 import React from "react";
 import styled from "styled-components";
 
-import TimeSelect from "./TimeSelect";
+import TimeSelectorInput from "./TimeSelectorInput";
 
 import { WorkingHourState, RangeData } from "./workingHours.types";
 
-interface RangeSelectorProps {
+interface RangeInputProps {
   dataKey: keyof WorkingHourState["weeklyData"];
   rangeData: RangeData;
   rangeIndex: number;
 }
 
-const RangeSelector: React.FC<RangeSelectorProps> = ({
+const RangeInput: React.FC<RangeInputProps> = ({
   dataKey,
   rangeData,
   rangeIndex,
 }) => {
   return (
     <Wrap>
-      <TimeSelect
+      <TimeSelectorInput
         dataKey={dataKey}
         rangeIndex={rangeIndex}
         rangeType={"start"}
         value={rangeData.start}
       />
       <span>-</span>
-      <TimeSelect
+      <TimeSelectorInput
         dataKey={dataKey}
         rangeIndex={rangeIndex}
         rangeType={"end"}
@@ -35,7 +35,7 @@ const RangeSelector: React.FC<RangeSelectorProps> = ({
   );
 };
 
-export default RangeSelector;
+export default RangeInput;
 
 const Wrap = styled.div`
   display: flex;

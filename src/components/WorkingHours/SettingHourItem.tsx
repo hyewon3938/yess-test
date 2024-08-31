@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import RangeSelector from "./RangeSelector";
+import RangeInput from "./RangeInput";
 import { deleteIcon, addIcon } from "../../images/icon";
 import { WorkingHourData } from "./workingHours.types";
 import { useTypedDispatch } from "../../hooks/redux";
@@ -30,7 +30,7 @@ const SettingHourItem: React.FC<SettingHourItemProps> = ({ data }) => {
           <>
             {data?.range?.map((item, index) => (
               <RangeItemWrap key={`${data.id}-working-hour-range-${index}`}>
-                <RangeSelector
+                <RangeInput
                   dataKey={data.id}
                   rangeData={item}
                   rangeIndex={index}

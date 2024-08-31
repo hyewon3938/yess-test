@@ -5,14 +5,14 @@ import { WorkingHourState, TimeData, RangeData } from "./workingHours.types";
 import { changeTimeValue } from "../../store/slices/workingHourSlice";
 import { useTypedDispatch } from "../../hooks/redux";
 
-interface TimeSelectProps {
+interface TimeSelectorInputProps {
   dataKey: keyof WorkingHourState["weeklyData"];
   rangeIndex: number;
   rangeType: keyof RangeData;
   value: TimeData;
 }
 
-const TimeSelect: React.FC<TimeSelectProps> = ({
+const TimeSelectorInput: React.FC<TimeSelectorInputProps> = ({
   dataKey,
   rangeIndex,
   rangeType,
@@ -67,7 +67,7 @@ const TimeSelect: React.FC<TimeSelectProps> = ({
   );
 };
 
-export default TimeSelect;
+export default TimeSelectorInput;
 
 const Wrap = styled.div`
   width: 180px;
