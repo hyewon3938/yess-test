@@ -1,11 +1,11 @@
-export type ImageData = {
+export interface ImageData {
   id: string;
   url: string;
   order?: number;
   width: number;
   height: number;
   expectedHeight?: number;
-};
+}
 
 export interface GetImagesParams {
   page: number;
