@@ -2,14 +2,19 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useTypedSelector, useTypedDispatch } from "../../hooks/redux";
 import SettingHourItem from "./SettingHourItem";
-import { setweeklyData } from "../../store/slices/workingHourSlice";
+import {
+  setweeklyData,
+  setIsEdited,
+} from "../../store/slices/workingHourSlice";
 
 interface ButtonProps {
   $isColored?: boolean;
 }
 
 const SettingHours: React.FC<ButtonProps> = () => {
-  const { weeklyData } = useTypedSelector((state) => state.workingHours);
+  const { weeklyData, isEdited } = useTypedSelector(
+    (state) => state.workingHours
+  );
   const dispatch = useTypedDispatch();
 
   useEffect(() => {
@@ -29,6 +34,7 @@ const SettingHours: React.FC<ButtonProps> = () => {
 
   const onClickUpdate = () => {
     localStorage.setItem("LOCAL_WEEKLY_DATA", JSON.stringify(weeklyData));
+    dispatch(setIsEdited(false));
   };
 
   return (
@@ -46,12 +52,16 @@ const SettingHours: React.FC<ButtonProps> = () => {
           )
         )}
       </HourListWrap>
-      <ButtonWrap>
-        <Button>Cancel</Button>
-        <Button $isColored={true} onClick={onClickUpdate}>
-          Update
-        </Button>
-      </ButtonWrap>
+      {isEdited && (
+        <ButtonWrap>
+          <div>
+            <Button>Cancel</Button>
+            <Button $isColored={true} onClick={onClickUpdate}>
+              Update
+            </Button>
+          </div>
+        </ButtonWrap>
+      )}
     </Wrap>
   );
 };
@@ -61,7 +71,7 @@ export default SettingHours;
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-  padding: 30px 16px;
+  padding: 30px 16px 84px 16px;
 `;
 
 const TitleWrap = styled.div`
@@ -79,11 +89,21 @@ const HourListWrap = styled.ul`
 `;
 
 const ButtonWrap = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  padding: 16px 0 0 0;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-top: solid 1px #e7e7e7;
+  > div {
+    width: 1200px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 16px;
+  }
 `;
 
 const Button = styled.button<ButtonProps>`

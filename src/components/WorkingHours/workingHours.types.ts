@@ -8,6 +8,7 @@ export interface WorkingHourState {
     FRI: WorkingHourData;
     SAT: WorkingHourData;
   };
+  isEdited: boolean;
 }
 
 export interface WorkingHourData {

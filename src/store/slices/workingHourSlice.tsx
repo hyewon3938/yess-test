@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { WorkingHourData } from "../../components/WorkingHours/workingHours.types";
 import {
   WorkingHourState,
   RangeData,
 } from "../../components/WorkingHours/workingHours.types";
 
 const initialState: WorkingHourState = {
+  isEdited: false,
   weeklyData: {
     SUN: {
       id: "SUN",
@@ -84,12 +84,17 @@ export const workingHourSlice = createSlice({
       state,
       { payload }: PayloadAction<WorkingHourState["weeklyData"]>
     ) => {
+      state.isEdited = false;
       state.weeklyData = payload;
+    },
+    setIsEdited: (state, { payload }: PayloadAction<boolean>) => {
+      state.isEdited = payload;
     },
     addRange: (
       state,
       { payload }: PayloadAction<keyof WorkingHourState["weeklyData"]>
     ) => {
+      state.isEdited = true;
       state.weeklyData[payload].range.push(newRangeData);
     },
     deleteRange: (
@@ -102,6 +107,7 @@ export const workingHourSlice = createSlice({
       }>
     ) => {
       const { key, rangeIndex } = payload;
+      state.isEdited = true;
       state.weeklyData[key].range = state.weeklyData[key].range.filter(
         (_, index) => index !== rangeIndex
       );
@@ -119,11 +125,17 @@ export const workingHourSlice = createSlice({
     ) => {
       const { key, rangeIndex, rangeType, value } = payload;
       const [hour, minute] = value.split(":");
+      state.isEdited = true;
       state.weeklyData[key].range[rangeIndex][rangeType] = { hour, minute };
     },
   },
 });
 
-export const { setweeklyData, addRange, deleteRange, changeTimeValue } =
-  workingHourSlice.actions;
+export const {
+  setweeklyData,
+  setIsEdited,
+  addRange,
+  deleteRange,
+  changeTimeValue,
+} = workingHourSlice.actions;
 export default workingHourSlice.reducer;
