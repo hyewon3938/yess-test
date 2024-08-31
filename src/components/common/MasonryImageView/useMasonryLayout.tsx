@@ -21,7 +21,7 @@ const useMasonryLayout = (wrapRef: RefObject<HTMLDivElement>) => {
   }, [calculateColumnCount, columnCount]);
 
   const debouncedHandleResize = useMemo(
-    () => debounce(handleResize, 200),
+    () => debounce(handleResize, 100),
     [handleResize]
   );
 

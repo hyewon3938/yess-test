@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ImageData } from "../../CatViewer/catViewer.types";
 import MasonryImageItem from "./MasonryImageItem";
@@ -8,6 +8,10 @@ interface MasonryImageViewProps {
 }
 
 const MasonryImageView: React.FC<MasonryImageViewProps> = ({ columns }) => {
+  const [currentImage, setCurrentImage] = useState<ImageData | null>(null);
+
+  console.log(currentImage);
+
   return (
     <Wrap>
       {columns.map((column, colIndex) => (
@@ -18,6 +22,8 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({ columns }) => {
               colOrder={colIndex}
               order={index}
               data={item}
+              setCurrentImage={setCurrentImage}
+              currentImage={currentImage}
             />
           ))}
         </Column>
