@@ -32,11 +32,7 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
         $isImageLoaded={isLoaded}
       />
       <Wrap $isImageLoaded={isLoaded}>
-        <img
-          src={data.url}
-          alt={`cat-image-${data?.id}`}
-          onLoad={onLoadImage}
-        />
+        <img src={data.url} alt={`cat-${data?.id}`} onLoad={onLoadImage} />
         {isLoaded && <span>{colOrder + " " + order + " " + data?.order}</span>}
       </Wrap>
     </>
