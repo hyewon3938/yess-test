@@ -17,6 +17,7 @@ const SettingHours: React.FC<ButtonProps> = () => {
   }, []);
 
   const checkLocalData = () => {
+    // 저장된 데이터가 있는 경우 저장 데이터 적용
     const localData = localStorage.getItem("LOCAL_WEEKLY_DATA");
 
     if (!localData) {
@@ -24,6 +25,10 @@ const SettingHours: React.FC<ButtonProps> = () => {
     } else {
       dispatch(setweeklyData(JSON.parse(localData)));
     }
+  };
+
+  const onClickUpdate = () => {
+    localStorage.setItem("LOCAL_WEEKLY_DATA", JSON.stringify(weeklyData));
   };
 
   return (
@@ -43,7 +48,9 @@ const SettingHours: React.FC<ButtonProps> = () => {
       </HourListWrap>
       <ButtonWrap>
         <Button>Cancel</Button>
-        <Button $isColored={true}>Update</Button>
+        <Button $isColored={true} onClick={onClickUpdate}>
+          Update
+        </Button>
       </ButtonWrap>
     </Wrap>
   );

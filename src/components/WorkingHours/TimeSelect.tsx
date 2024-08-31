@@ -25,7 +25,7 @@ const TimeSelect: React.FC<TimeSelectProps> = ({
 
     return Array.from({ length: 96 }).map((_, index) => {
       const hour = Math.trunc(index / 4);
-      const hourValue = hour > 10 ? `${hour}` : `0${hour}`;
+      const hourValue = hour > 9 ? `${hour}` : `0${hour}`;
       const minute = minutes[index % 4];
       return {
         value: hourValue + ":" + minute,
