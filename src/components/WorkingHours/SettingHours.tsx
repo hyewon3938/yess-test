@@ -1,6 +1,6 @@
 import React from "react";
-
 import styled from "styled-components";
+import { useTypedSelector, useTypedDispatch } from "../../hooks/redux";
 import SettingHourItem from "./SettingHourItem";
 
 interface ButtonProps {
@@ -8,15 +8,8 @@ interface ButtonProps {
 }
 
 const SettingHours: React.FC<ButtonProps> = () => {
-  const weeklyData = [
-    { id: "SUN", title: "Sunday" },
-    { id: "MON", title: "Monday" },
-    { id: "TUE", title: "Tuesday" },
-    { id: "WED", title: "Wednesday" },
-    { id: "THU", title: "Thursday" },
-    { id: "FRI", title: "Friday" },
-    { id: "SAT", title: "Saturday" },
-  ];
+  const { weeklyData } = useTypedSelector((state) => state.workingHours);
+  const dispatch = useTypedDispatch();
 
   return (
     <Wrap>
@@ -24,9 +17,14 @@ const SettingHours: React.FC<ButtonProps> = () => {
         <h2>Set your weekly hours</h2>
       </TitleWrap>
       <HourListWrap>
-        {weeklyData.map((item) => (
-          <SettingHourItem key={`seeting-hour-${item.id}`} data={item} />
-        ))}
+        {(Object.keys(weeklyData) as Array<keyof typeof weeklyData>).map(
+          (key) => (
+            <SettingHourItem
+              key={`seeting-hour-${key}`}
+              data={weeklyData[key]}
+            />
+          )
+        )}
       </HourListWrap>
       <ButtonWrap>
         <Button>Cancel</Button>
@@ -41,7 +39,7 @@ export default SettingHours;
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-  padding: 30px 0;
+  padding: 30px 16px;
 `;
 
 const TitleWrap = styled.div`

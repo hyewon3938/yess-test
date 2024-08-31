@@ -3,7 +3,13 @@ import styled from "styled-components";
 
 import TimeSelect from "./TimeSelect";
 
-const RangeSelector = () => {
+import { RangeData } from "./workingHours.types";
+
+interface RangeSelectorProps {
+  data: RangeData;
+}
+
+const RangeSelector: React.FC<RangeSelectorProps> = ({}) => {
   return (
     <Wrap>
       <TimeSelect />

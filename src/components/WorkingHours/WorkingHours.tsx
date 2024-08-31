@@ -22,11 +22,13 @@ const Wrap = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #fcfcff;
+  overflow-y: scroll;
 `;
 
 const ContentWrap = styled.div`
   display: flex;
   width: 1200px;
+  height: fit-content;
   padding: 20px 0;
 `;
 
