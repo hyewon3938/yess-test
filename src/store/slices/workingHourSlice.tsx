@@ -4,7 +4,7 @@ import {
   RangeData,
 } from "../../components/WorkingHours/workingHours.types";
 
-const initialState: WorkingHourState = {
+export const initialState: WorkingHourState = {
   isEdited: false,
   weeklyData: {
     SUN: {

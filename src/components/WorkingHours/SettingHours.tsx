@@ -6,6 +6,7 @@ import {
   setweeklyData,
   setIsEdited,
 } from "../../store/slices/workingHourSlice";
+import { initialState } from "../../store/slices/workingHourSlice";
 
 interface ButtonProps {
   $isColored?: boolean;
@@ -37,6 +38,14 @@ const SettingHours: React.FC<ButtonProps> = () => {
     dispatch(setIsEdited(false));
   };
 
+  const onClickCancel = () => {
+    const localData = localStorage.getItem("LOCAL_WEEKLY_DATA");
+    const resetData = localData
+      ? JSON.parse(localData)
+      : initialState.weeklyData;
+    dispatch(setweeklyData(resetData));
+  };
+
   return (
     <Wrap>
       <TitleWrap>
@@ -55,7 +64,7 @@ const SettingHours: React.FC<ButtonProps> = () => {
       {isEdited && (
         <ButtonWrap>
           <div>
-            <Button>Cancel</Button>
+            <Button onClick={onClickCancel}>Cancel</Button>
             <Button $isColored={true} onClick={onClickUpdate}>
               Update
             </Button>
