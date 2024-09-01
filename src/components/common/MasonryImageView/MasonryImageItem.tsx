@@ -89,7 +89,9 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
           onLoad={onLoadImage}
           onClick={onClickImageHandler}
         />
-        {data.url === currentImage?.url && <ImageDetailBackground />}
+        {data.url === currentImage?.url && (
+          <ImageDetailBackground onClick={closeImageDetail} />
+        )}
         <ImageForDetail
           ref={detailImgRef}
           onClick={closeImageDetail}
