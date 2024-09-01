@@ -4,8 +4,6 @@ import styled, { keyframes } from "styled-components";
 import { ImageData } from "../../CatViewer/catViewer.types";
 
 interface ImageDataProps {
-  order: number;
-  colOrder: number;
   data: ImageData;
   setCurrentImage: (data: ImageData | null) => void;
   currentImage: ImageData | null;
@@ -21,8 +19,6 @@ interface WrapProps {
 }
 
 const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
-  order,
-  colOrder,
   data,
   setCurrentImage,
   currentImage,
@@ -101,7 +97,6 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
         >
           <img src={data.url} alt={`cat-detail-${data?.id}`} />
         </ImageForDetail>
-        {isLoaded && <span>{colOrder + " " + order + " " + data?.order}</span>}
       </Wrap>
     </>
   );

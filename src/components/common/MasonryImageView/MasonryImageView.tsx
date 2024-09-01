@@ -17,8 +17,6 @@ const MasonryImageView: React.FC<MasonryImageViewProps> = ({ columns }) => {
           {column.map((item, index) => (
             <MasonryImageItem
               key={`image-${colIndex}-${index}-${item?.id}`}
-              colOrder={colIndex}
-              order={index}
               data={item}
               setCurrentImage={setCurrentImage}
               currentImage={currentImage}
