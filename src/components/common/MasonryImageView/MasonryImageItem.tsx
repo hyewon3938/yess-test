@@ -17,7 +17,7 @@ interface WrapProps {
   $isDetailMode?: boolean;
   $x?: number | null;
   $y?: number | null;
-  // $positionData?: { x: number; y: number } | null;
+  $scaleFactor?: number | null;
 }
 
 const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
@@ -34,6 +34,7 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
   const [positionData, setPositionData] = useState<{
     x: number;
     y: number;
+    scaleFactor: number;
   } | null>(null);
 
   const onLoadImage = () => {
@@ -54,9 +55,17 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
     const translateX = centerX - imgCenterX;
     const translateY = centerY - imgCenterY;
 
-    console.log(translateX, translateY);
+    const newHeight = window.scrollY + window.innerHeight;
+    const newWidth = window.innerWidth;
 
-    setPositionData({ x: translateX, y: translateY });
+    const heightScaleFactor = newHeight / imgRect.height;
+    const widthScaleFactor = newWidth / imgRect.width;
+
+    const scaleFactor = Math.min(heightScaleFactor, widthScaleFactor);
+
+    console.log(translateX, translateY, scaleFactor);
+
+    setPositionData({ x: translateX, y: translateY, scaleFactor });
     setCurrentImage && setCurrentImage(data);
   };
 
@@ -88,6 +97,7 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
           $isDetailMode={data.url === currentImage?.url}
           $x={positionData?.x}
           $y={positionData?.y}
+          $scaleFactor={positionData?.scaleFactor}
         >
           <img src={data.url} alt={`cat-detail-${data?.id}`} />
         </ImageForDetail>
@@ -99,12 +109,18 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
 
 export default MasonryImageItem;
 
-const scaleUp = (x?: number | null, y?: number | null) => keyframes`
+const scaleUp = (
+  x?: number | null,
+  y?: number | null,
+  scaleFactor?: number | null
+) => keyframes`
   from {
-   // transform: translate(0, 0);
+    transform: translate(0, 0) scale(1);
+    opacity: 0; 
   }
   to {
-    transform: translate(${x}px, ${y}px);
+    transform: translate(${x}px, ${y}px) scale(${scaleFactor});
+    opacity: 1; 
   }
 `;
 
@@ -147,7 +163,8 @@ const ImageForDetail = styled.div<WrapProps>`
   left: 0;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.8);
-  animation: ${({ $x, $y }) => scaleUp($x, $y)} 0.3s forwards;
+  animation: ${({ $x, $y, $scaleFactor }) => scaleUp($x, $y, $scaleFactor)} 0.5s
+    forwards;
 
   > img {
     object-fit: contain;
