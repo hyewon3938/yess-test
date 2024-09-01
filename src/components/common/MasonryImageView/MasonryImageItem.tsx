@@ -15,6 +15,9 @@ interface WrapProps {
   $expectedHeight?: number | undefined;
   $isImageLoaded?: boolean;
   $isDetailMode?: boolean;
+  $x?: number | null;
+  $y?: number | null;
+  // $positionData?: { x: number; y: number } | null;
 }
 
 const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
@@ -26,17 +29,39 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const detailImgRef = useRef<HTMLImageElement>(null);
+
+  const [positionData, setPositionData] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const onLoadImage = () => {
     setIsLoaded(true);
   };
 
   const onClickImageHandler = () => {
-    console.log(imgRef.current?.getBoundingClientRect().top);
+    if (!detailImgRef?.current || !imgRef?.current) return;
+
+    const centerX = window.innerWidth / 2;
+    const centerY = window.scrollY + window.innerHeight / 2;
+
+    const imgRect = imgRef.current?.getBoundingClientRect();
+
+    const imgCenterX = imgRect.left + imgRect.width / 2;
+    const imgCenterY = imgRect.top + imgRect.height / 2 + window.scrollY;
+
+    const translateX = centerX - imgCenterX;
+    const translateY = centerY - imgCenterY;
+
+    console.log(translateX, translateY);
+
+    setPositionData({ x: translateX, y: translateY });
     setCurrentImage && setCurrentImage(data);
   };
 
   const closeImageDetail = () => {
+    setPositionData(null);
     setCurrentImage && setCurrentImage(null);
   };
 
@@ -58,8 +83,11 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
           onClick={onClickImageHandler}
         />
         <ImageForDetail
+          ref={detailImgRef}
           onClick={closeImageDetail}
           $isDetailMode={data.url === currentImage?.url}
+          $x={positionData?.x}
+          $y={positionData?.y}
         >
           <img src={data.url} alt={`cat-detail-${data?.id}`} />
         </ImageForDetail>
@@ -71,30 +99,15 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
 
 export default MasonryImageItem;
 
-// const scaleUp = keyframes`
-//   from {
-//    //transform: translateX(0);
-//    width : 100%;
-//    height: 100%;
-//   }
-//   20% {
-//     width : 100vw;
-//     height : 100vh;
-//     /* position : fixed;
-//     top :0;
-//     left:0; */
-//   }
-//   to {
-//     /* position : fixed; */
+const scaleUp = (x?: number | null, y?: number | null) => keyframes`
+  from {
+   // transform: translate(0, 0);
+  }
+  to {
+    transform: translate(${x}px, ${y}px);
+  }
+`;
 
-//    transform: translate(50%,50%);
-//     //width : 100vw;
-//     /* top :0;
-//     left:0;
-//     width : 100vw;
-//     height : 100vh; */
-//   }
-// `;
 const SkeletonWrap = styled.div<WrapProps>`
   display: ${({ $isImageLoaded }) => ($isImageLoaded ? "none" : "block")};
   width: 100%;
@@ -128,13 +141,13 @@ const ImageForDetail = styled.div<WrapProps>`
   display: ${({ $isDetailMode }) => ($isDetailMode ? "flex" : "none")};
   justify-content: center;
   align-items: center;
-  position: fixed;
+
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.8);
+  animation: ${({ $x, $y }) => scaleUp($x, $y)} 0.3s forwards;
 
   > img {
     object-fit: contain;

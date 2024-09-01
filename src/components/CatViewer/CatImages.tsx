@@ -82,7 +82,10 @@ const CatImages = () => {
 
 export default CatImages;
 
-const Wrap = styled.div``;
+const Wrap = styled.div`
+  max-width: 1200px;
+  margin: auto;
+`;
 
 const Observer = styled.div`
   display: flex;

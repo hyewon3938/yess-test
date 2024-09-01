@@ -10,8 +10,6 @@ interface MasonryImageViewProps {
 const MasonryImageView: React.FC<MasonryImageViewProps> = ({ columns }) => {
   const [currentImage, setCurrentImage] = useState<ImageData | null>(null);
 
-  console.log(currentImage);
-
   return (
     <Wrap>
       {columns.map((column, colIndex) => (
