@@ -40,6 +40,7 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
   const onClickImageHandler = () => {
     if (!detailImgRef?.current || !imgRef?.current) return;
 
+    //이동 방향 계산
     const centerX = window.innerWidth / 2;
     const centerY = window.scrollY + window.innerHeight / 2;
 
@@ -51,15 +52,14 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
     const translateX = centerX - imgCenterX;
     const translateY = centerY - imgCenterY;
 
-    const newHeight = window.scrollY + window.innerHeight;
+    // 얼만큼 확대할지 계산
+    const newHeight = window.innerHeight;
     const newWidth = window.innerWidth;
 
     const heightScaleFactor = newHeight / imgRect.height;
     const widthScaleFactor = newWidth / imgRect.width;
 
     const scaleFactor = Math.min(heightScaleFactor, widthScaleFactor);
-
-    console.log(translateX, translateY, scaleFactor);
 
     setPositionData({ x: translateX, y: translateY, scaleFactor });
     setCurrentImage && setCurrentImage(data);
