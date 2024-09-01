@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled, { keyframes } from "styled-components";
 
 import { ImageData } from "../../CatViewer/catViewer.types";
@@ -63,11 +63,13 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
 
     setPositionData({ x: translateX, y: translateY, scaleFactor });
     setCurrentImage && setCurrentImage(data);
+    document.body.style.overflow = "hidden";
   };
 
   const closeImageDetail = () => {
     setPositionData(null);
     setCurrentImage && setCurrentImage(null);
+    document.body.style.overflow = "unset";
   };
 
   return (
@@ -87,6 +89,7 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
           onLoad={onLoadImage}
           onClick={onClickImageHandler}
         />
+        {data.url === currentImage?.url && <ImageDetailBackground />}
         <ImageForDetail
           ref={detailImgRef}
           onClick={closeImageDetail}
@@ -111,11 +114,9 @@ const scaleUp = (
 ) => keyframes`
   from {
     transform: translate(0, 0) scale(1);
-    opacity: 0; 
   }
   to {
     transform: translate(${x}px, ${y}px) scale(${scaleFactor});
-    opacity: 1; 
   }
 `;
 
@@ -157,12 +158,22 @@ const ImageForDetail = styled.div<WrapProps>`
   top: 0;
   left: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.8);
   animation: ${({ $x, $y, $scaleFactor }) => scaleUp($x, $y, $scaleFactor)} 0.5s
     forwards;
 
   > img {
     object-fit: contain;
     height: 100%;
+    z-index: 1000;
   }
+`;
+
+const ImageDetailBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 900;
+  background-color: rgba(255, 255, 255, 0.8);
 `;
