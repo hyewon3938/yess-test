@@ -181,7 +181,7 @@ const ImageForDetail = styled.div<WrapProps>`
   top: 0;
   left: 0;
   z-index: 1000;
-
+  width: 100%;
   animation: ${({ $x, $y, $scaleFactor, $isClosing }) =>
       $isClosing
         ? scaleDown($x, $y, $scaleFactor)
