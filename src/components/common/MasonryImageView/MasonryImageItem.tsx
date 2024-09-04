@@ -16,6 +16,7 @@ interface WrapProps {
   $x?: number | null;
   $y?: number | null;
   $scaleFactor?: number | null;
+  $isClosing?: boolean;
 }
 
 const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
@@ -32,6 +33,7 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
     y: number;
     scaleFactor: number;
   } | null>(null);
+  const [isClosing, setIsClosing] = useState<boolean>(false);
 
   const onLoadImage = () => {
     setIsLoaded(true);
@@ -67,9 +69,14 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
   };
 
   const closeImageDetail = () => {
-    setPositionData(null);
-    setCurrentImage && setCurrentImage(null);
-    document.body.style.overflow = "unset";
+    setIsClosing(true);
+
+    setTimeout(() => {
+      setIsClosing(false);
+      setPositionData(null);
+      setCurrentImage && setCurrentImage(null);
+      document.body.style.overflow = "unset";
+    }, 300); // 애니메이션 시간과 동일하게 설정
   };
 
   return (
@@ -99,6 +106,7 @@ const MasonryImageItem: React.FC<ImageDataProps & WrapProps> = ({
           $x={positionData?.x}
           $y={positionData?.y}
           $scaleFactor={positionData?.scaleFactor}
+          $isClosing={isClosing}
         >
           <img src={data.url} alt={`cat-detail-${data?.id}`} />
         </ImageForDetail>
@@ -119,6 +127,19 @@ const scaleUp = (
   }
   to {
     transform: translate(${x}px, ${y}px) scale(${scaleFactor});
+  }
+`;
+
+const scaleDown = (
+  x?: number | null,
+  y?: number | null,
+  scaleFactor?: number | null
+) => keyframes`
+  from {
+    transform: translate(${x}px, ${y}px) scale(${scaleFactor});
+  }
+  to {
+    transform: translate(0, 0) scale(1);
   }
 `;
 
@@ -160,8 +181,12 @@ const ImageForDetail = styled.div<WrapProps>`
   top: 0;
   left: 0;
   z-index: 1000;
-  animation: ${({ $x, $y, $scaleFactor }) => scaleUp($x, $y, $scaleFactor)} 0.5s
-    forwards;
+
+  animation: ${({ $x, $y, $scaleFactor, $isClosing }) =>
+      $isClosing
+        ? scaleDown($x, $y, $scaleFactor)
+        : scaleUp($x, $y, $scaleFactor)}
+    0.3s forwards;
 
   > img {
     object-fit: contain;
